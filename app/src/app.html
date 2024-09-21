@@ -19,12 +19,12 @@
 	
 	%sveltekit.head%
   </head>
-  <body class="dark" data-sveltekit-preload-data="hover">
+  <body class="light" data-sveltekit-preload-data="hover">
     <nav class="left drawer l">
       <header>
         <nav>
-          <img src="https://www.beercss.com/favicon.png" class="circle">
-          <h6>Cheers</h6>
+          <img src="%sveltekit.assets%/favicon.png" class="circle">
+          <h6>Mosaic</h6>
         </nav>
       </header>
       <a>
@@ -32,12 +32,16 @@
         <div>Home</div>
       </a>
       <a>
+        <i>create</i>
+        <div>Create Mosaic</div>
+      </a>
+      <a>
         <i>search</i>
-        <div>Search</div>
+        <div>My Mosaics</div>
       </a>
       <a>
         <i>share</i>
-        <div>Share</div>
+        <div>Public Mosaics</div>
       </a>
       <a>
         <i>more_vert</i>
@@ -68,12 +72,12 @@
         <div>Home</div>
       </a>
       <a>
-        <i>search</i>
-        <div>Search</div>
+        <i>my mosaics</i>
+        <div>My Mosaics</div>
       </a>
       <a>
         <i>share</i>
-        <div>Share</div>
+        <div>Public Mosaics</div>
       </a>
       <a>
         <i>more_vert</i>
@@ -97,9 +101,7 @@
     </nav>
 
     <main class="responsive">
-      <h3>Welcome</h3>
-      <h5>The beer is ready!</h5>
-	  <div style="display: contents">%sveltekit.body%</div>
+  	  <div class="container" style="display: contents">%sveltekit.body%</div>
     </main>
   </body>
 </html>
