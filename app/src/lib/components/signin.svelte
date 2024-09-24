@@ -1,11 +1,25 @@
 <script lang="ts">
-  import { GOOGLE_CLIENT_ID } from "$lib/stores/auth.js";
+  import { onMount } from 'svelte';
+  import { setUser, GOOGLE_CLIENT_ID } from "$lib/stores/auth.js";
     
   let clientId = GOOGLE_CLIENT_ID;
 
-  function handleToken(resp) {
-    console.log('RESP', resp);
-  }
+  onMount(() => {
+    const handleLogin = (event) => {
+      const response = event.detail;
+      console.log('Google login response:', response);
+      
+      // Update the Svelte store with the response
+      setUser(response);
+    };
+
+    window.addEventListener('google-login', handleLogin);
+
+    // Cleanup the event listener when the component is destroyed
+    return () => {
+      window.removeEventListener('google-login', handleLogin);
+    };
+  });
   </script>
   
   <div>

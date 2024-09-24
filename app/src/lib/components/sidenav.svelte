@@ -1,8 +1,6 @@
 <script>
     import SignIn from '$lib/components/signin.svelte';
-    import {page} from "$app/stores";
-
-    let loggedIn = $page.data.session
+    import { user } from "$lib/stores/auth.js";
 </script>
 <div>
     <nav class="left drawer l">
@@ -16,13 +14,13 @@
       <i>home</i>
       <div>Home</div>
     </a>
-    {#if loggedIn}
+    {#if $user}
     <a href="/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
     <a href="/library">
-      <i>search</i>
+      <img class="circle tiny" src="{$user.picture}">
       <div>My Mosaics</div>
     </a>
     {:else}

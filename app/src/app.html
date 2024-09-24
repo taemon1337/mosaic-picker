@@ -16,6 +16,12 @@
 	<!-- Load the Google API Loader script. -->
 	<meta name="google-signin-client_id" content="import.meta.env.VITE_GOOGLE_CLIENT_ID" />
 	<script src="https://accounts.google.com/gsi/client" async defer></script>
+	<script>
+		function handleToken(resp) {
+			const event = new CustomEvent('google-login', { detail: resp });
+        	window.dispatchEvent(event); // Dispatch the event globally
+		}
+	</script>
 
 	%sveltekit.head%
   </head>
