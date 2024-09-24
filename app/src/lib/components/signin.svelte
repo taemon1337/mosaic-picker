@@ -1,10 +1,13 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { decodeJwtResponse, onGoogleScriptLoad } from '$lib/stores/auth.ts';
+  import { GOOGLE_CLIENT_ID } from "$lib/stores/auth.js";
     
-    onMount(() => {
-      onGoogleScriptLoad(decodeJwtResponse);
-    });
+  let clientId = GOOGLE_CLIENT_ID;
+
+  function handleToken(resp) {
+    console.log('RESP', resp);
+  }
   </script>
   
-  <div id="googleSignIn"></div>
+  <div>
+    <div id="g_id_onload" data-client_id="{$clientId}" data-callback="handleToken" data-your_own_param_1_to_login="any_value"></div>
+  </div>

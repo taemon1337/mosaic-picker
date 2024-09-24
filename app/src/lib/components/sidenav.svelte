@@ -30,6 +30,7 @@
       <i>account_circle</i>
       <div>
         <SignIn />
+        <div>Login</div>
       </div>
     </a>
     <a href="/studio">

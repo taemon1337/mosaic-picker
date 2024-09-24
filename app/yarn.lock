@@ -141,15 +141,10 @@
   resolved "https://registry.npmjs.org/@polka/url/-/url-1.0.0-next.28.tgz"
   integrity sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==
 
-"@rollup/rollup-linux-x64-gnu@4.22.2":
-  version "4.22.2"
-  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.22.2.tgz"
-  integrity sha512-a0lkvNhFLhf+w7A95XeBqGQaG0KfS3hPFJnz1uraSdUe/XImkp/Psq0Ca0/UdD5IEAGoENVmnYrzSC9Y2a2uKQ==
-
-"@rollup/rollup-linux-x64-musl@4.22.2":
-  version "4.22.2"
-  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.22.2.tgz"
-  integrity sha512-sSWBVZgzwtsuG9Dxi9kjYOUu/wKW+jrbzj4Cclabqnfkot8Z3VEHcIgyenA3lLn/Fu11uDviWjhctulkhEO60g==
+"@rollup/rollup-linux-x64-gnu@4.22.4":
+  version "4.22.4"
+  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.22.4.tgz"
+  integrity sha512-87v0ol2sH9GE3cLQLNEy0K/R0pz1nvg76o8M5nhMR0+Q+BBGLnb35P0fVz4CQxHYXaAOhE8HhlkaZfsdUOlHwg==
 
 "@sveltejs/adapter-auto@^3.0.0":
   version "3.2.5"
@@ -508,6 +503,11 @@ devalue@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/devalue/-/devalue-5.0.0.tgz"
   integrity sha512-gO+/OMXF7488D+u3ue+G7Y4AA3ZmUnB3eHJXmBTgNHvr4ZNzl36A0ZtG+XCRNYCkYx/bFmw4qtkoFLa+wSrwAA==
+
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.4.5.tgz"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 esbuild@^0.21.3:
   version "0.21.5"
@@ -1185,28 +1185,28 @@ reusify@^1.0.4:
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
 rollup@^4.20.0:
-  version "4.22.2"
-  resolved "https://registry.npmjs.org/rollup/-/rollup-4.22.2.tgz"
-  integrity sha512-JWWpTrZmqQGQWt16xvNn6KVIUz16VtZwl984TKw0dfqqRpFwtLJYYk1/4BTgplndMQKWUk/yB4uOShYmMzA2Vg==
+  version "4.22.4"
+  resolved "https://registry.npmjs.org/rollup/-/rollup-4.22.4.tgz"
+  integrity sha512-vD8HJ5raRcWOyymsR6Z3o6+RzfEPCnVLMFJ6vRslO1jt4LO6dUo5Qnpg7y4RkZFM2DMe3WUirkI5c16onjrc6A==
   dependencies:
     "@types/estree" "1.0.5"
   optionalDependencies:
-    "@rollup/rollup-android-arm-eabi" "4.22.2"
-    "@rollup/rollup-android-arm64" "4.22.2"
-    "@rollup/rollup-darwin-arm64" "4.22.2"
-    "@rollup/rollup-darwin-x64" "4.22.2"
-    "@rollup/rollup-linux-arm-gnueabihf" "4.22.2"
-    "@rollup/rollup-linux-arm-musleabihf" "4.22.2"
-    "@rollup/rollup-linux-arm64-gnu" "4.22.2"
-    "@rollup/rollup-linux-arm64-musl" "4.22.2"
-    "@rollup/rollup-linux-powerpc64le-gnu" "4.22.2"
-    "@rollup/rollup-linux-riscv64-gnu" "4.22.2"
-    "@rollup/rollup-linux-s390x-gnu" "4.22.2"
-    "@rollup/rollup-linux-x64-gnu" "4.22.2"
-    "@rollup/rollup-linux-x64-musl" "4.22.2"
-    "@rollup/rollup-win32-arm64-msvc" "4.22.2"
-    "@rollup/rollup-win32-ia32-msvc" "4.22.2"
-    "@rollup/rollup-win32-x64-msvc" "4.22.2"
+    "@rollup/rollup-android-arm-eabi" "4.22.4"
+    "@rollup/rollup-android-arm64" "4.22.4"
+    "@rollup/rollup-darwin-arm64" "4.22.4"
+    "@rollup/rollup-darwin-x64" "4.22.4"
+    "@rollup/rollup-linux-arm-gnueabihf" "4.22.4"
+    "@rollup/rollup-linux-arm-musleabihf" "4.22.4"
+    "@rollup/rollup-linux-arm64-gnu" "4.22.4"
+    "@rollup/rollup-linux-arm64-musl" "4.22.4"
+    "@rollup/rollup-linux-powerpc64le-gnu" "4.22.4"
+    "@rollup/rollup-linux-riscv64-gnu" "4.22.4"
+    "@rollup/rollup-linux-s390x-gnu" "4.22.4"
+    "@rollup/rollup-linux-x64-gnu" "4.22.4"
+    "@rollup/rollup-linux-x64-musl" "4.22.4"
+    "@rollup/rollup-win32-arm64-msvc" "4.22.4"
+    "@rollup/rollup-win32-ia32-msvc" "4.22.4"
+    "@rollup/rollup-win32-x64-msvc" "4.22.4"
     fsevents "~2.3.2"
 
 run-parallel@^1.1.9:
