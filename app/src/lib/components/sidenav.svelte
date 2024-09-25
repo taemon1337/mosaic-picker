@@ -1,6 +1,22 @@
 <script>
     import SignIn from '$lib/components/signin.svelte';
-    import { user } from "$lib/stores/auth.js";
+    import { user, setUser, setGoogleClient, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SCOPES } from "$lib/stores/auth.js";
+
+    let tokenClient;
+
+    function login() {
+      if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: GOOGLE_CLIENT_SCOPES,
+            callback: 'handleClient',
+        });
+        console.log('tokenClient', tokenClient);
+        setGoogleClient(tokenClient);
+      } else {
+        console.error('google accounts library not loaded.');
+      }
+    }
 </script>
 <div>
     <nav class="left drawer l">
@@ -24,7 +40,7 @@
       <div>My Mosaics</div>
     </a>
     {:else}
-    <a href="/login">
+    <a on:click|preventDefault={login} href="/login">
       <i>account_circle</i>
       <div>
         <SignIn />

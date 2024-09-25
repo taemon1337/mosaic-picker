@@ -3,8 +3,13 @@ import { env } from '$env/dynamic/public';
 
 export const isLoggedIn = writable(false);
 export const user = writable(null);
+export const Gclient = writable(null);
 export const GOOGLE_CLIENT_ID = readable(env.PUBLIC_GOOGLE_CLIENT_ID);
 export const GOOGLE_CLIENT_SCOPES = readable(env.PUBLIC_GOOGLE_CLIENT_SCOPES);
+
+export function setGoogleClient(tokenClient) {
+  Gclient.set(tokenClient);
+}
 
 // Helper function to parse the JWT token (base64 decoding)
 function parseJwt(token) {

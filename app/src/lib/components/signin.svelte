@@ -15,12 +15,6 @@
 
     const loadClient = (event) => {
       console.log('loading google client');
-      // tokenClient = google.accounts.oauth2.initTokenClient({
-      //     client_id: GOOGLE_CLIENT_ID,
-      //     scope: GOOGLE_CLIENT_SCOPES,
-      //     callback: 'handleClient',
-      // });
-      // console.log('tokenClient', tokenClient);
     };
 
     window.addEventListener('google-login', handleLogin);
@@ -35,5 +29,5 @@
   </script>
   
   <div>
-    <div id="g_id_onload" data-client_id="{$clientId}" data-callback="handleToken" data-your_own_param_1_to_login="any_value"></div>
+    <!-- <div id="g_id_onload" data-client_id="{$clientId}" data-callback="handleToken" data-your_own_param_1_to_login="any_value"></div> -->
   </div>
