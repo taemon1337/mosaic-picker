@@ -13,15 +13,31 @@
     <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.7.8/dist/cdn/beer.min.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.2/dist/cdn/material-dynamic-colors.min.js"></script>
 	
-	<!-- Load the Google API Loader script. -->
-	<meta name="google-signin-client_id" content="import.meta.env.VITE_GOOGLE_CLIENT_ID" />
-	<script src="https://accounts.google.com/gsi/client" async defer></script>
 	<script>
 		function handleToken(resp) {
 			const event = new CustomEvent('google-login', { detail: resp });
         	window.dispatchEvent(event); // Dispatch the event globally
 		}
+		function handleClient(resp) {
+			console.log('handle client', resp);
+		}
+		function onApiLoad() {
+        	gapi.load('picker', onPickerApiLoad);
+      	}
+		  function onPickerApiLoad() {
+        	console.log('picker api loaded');
+     	}
+		function onGisLoad(resp) {
+			console.log('gis loaded', resp);
+			const event = new CustomEvent('google-account', { detail: resp });
+        	window.dispatchEvent(event); // Dispatch the event globally
+		}
 	</script>
+
+	<!-- Load the Google API Loader script. -->
+	<meta name="google-signin-client_id" content="import.meta.env.VITE_GOOGLE_CLIENT_ID" />
+	<script src="https://accounts.google.com/gsi/client" onload="onGisLoad()" async defer></script>
+	<script src="https://apis.google.com/js/api.js" onload="onApiLoad()" async defer></script>
 
 	%sveltekit.head%
   </head>
