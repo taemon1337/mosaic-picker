@@ -1,31 +1,31 @@
 import { readable, writable } from 'svelte/store';
 import { env } from '$env/dynamic/public';
 
-// https://developers.google.com/drive/picker/guides/sample
+// ref: https://developers.google.com/drive/picker/guides/sample
 
 /* exported gapiLoaded */
 /* exported gisLoaded */
 /* exported handleAuthClick */
 /* exported handleSignoutClick */
 
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
-export const SCOPES = readable(env.PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/drive.metadata.readonly');
-
-// TODO(developer): Set to client ID and API key from the Developer Console
-export const CLIENT_ID = readable(env.PUBLIC_GOOGLE_CLIENT_ID);
-export const API_KEY = readable(env.PUBLIC_GOOGLE_API_KEY);
-
-// TODO(developer): Replace with your own project number from console.developers.google.com.
-export const APP_ID = readable(env.PUBLIC_GOOGLE_APP_ID);
+export const SCOPES = readable(env.PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/drive.metadata.readonly'); // scopes required by API, separated by spaces
+export const CLIENT_ID = readable(env.PUBLIC_GOOGLE_CLIENT_ID); // client ID from console.developers.google.com
+export const API_KEY = readable(env.PUBLIC_GOOGLE_API_KEY); // API key from console.developers.google.com
+export const APP_ID = readable(env.PUBLIC_GOOGLE_APP_ID); // project number from console.developers.google.com
 
 let tokenClient;
 let accessToken = null;
 let pickerInited = false;
 let gisInited = false;
 
+export const authorize_button_visibility = writable('hidden');
+export const authorize_button_content = writable('authorize');
+export const signout_button_visibility = writable('hidden');
+
+/*
 document.getElementById('authorize_button').style.visibility = 'hidden';
 document.getElementById('signout_button').style.visibility = 'hidden';
+*/
 
 /**
 * Callback after api.js is loaded.
@@ -62,7 +62,8 @@ function gisLoaded() {
 */
 function maybeEnableButtons() {
     if (pickerInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
+        //document.getElementById('authorize_button').style.visibility = 'visible';
+        authorize_button_visibility.set('visible');
     }
 }
 
@@ -75,8 +76,10 @@ function handleAuthClick() {
             throw (response);
         }
         accessToken = response.access_token;
-        document.getElementById('signout_button').style.visibility = 'visible';
-        document.getElementById('authorize_button').innerText = 'Refresh';
+        // document.getElementById('signout_button').style.visibility = 'visible';
+        // document.getElementById('authorize_button').innerText = 'Refresh';
+        signout_button_visibility.set('visible');
+        authorize_button_content.set('Refresh');
         await createPicker();
     };
 
@@ -98,8 +101,10 @@ function handleSignoutClick() {
         accessToken = null;
         google.accounts.oauth2.revoke(accessToken);
         document.getElementById('content').innerText = '';
-        document.getElementById('authorize_button').innerText = 'Authorize';
-        document.getElementById('signout_button').style.visibility = 'hidden';
+        // document.getElementById('authorize_button').innerText = 'Authorize';
+        // document.getElementById('signout_button').style.visibility = 'hidden';
+        authorize_button_content.set('Authorize');
+        signout_button_visibility.set('hidden');
     }
 }
 
