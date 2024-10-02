@@ -775,6 +775,11 @@ flatted@^3.2.9:
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.3.1.tgz"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
 
+gapi-script@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/gapi-script/-/gapi-script-1.2.0.tgz"
+  integrity sha512-NKTVKiIwFdkO1j1EzcrWu/Pz7gsl1GmBmgh+qhuV2Ytls04W/Eg5aiBL91SCiBM9lU0PMu7p1hTVxhh1rPT5Lw==
+
 glob-parent@^5.1.2:
   version "5.1.2"
   resolved "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz"
@@ -889,6 +894,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
+
+jose@^5.9.3:
+  version "5.9.3"
+  resolved "https://registry.npmjs.org/jose/-/jose-5.9.3.tgz"
+  integrity sha512-egLIoYSpcd+QUF+UHgobt5YzI2Pkw/H39ou9suW687MY6PmCwPmkNV/4TNjn1p2tX5xO3j0d0sq5hiYE24bSlg==
 
 js-yaml@^4.1.0:
   version "4.1.0"

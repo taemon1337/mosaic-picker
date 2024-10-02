@@ -1,22 +1,12 @@
 <script>
-    import SignIn from '$lib/components/signin.svelte';
-    import { user, setUser, setGoogleClient, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SCOPES } from "$lib/stores/auth.js";
+  import { onMount } from 'svelte';
+  import authStore from '$lib/stores/auth';
 
-    let tokenClient;
+  let user = authStore.user;
 
-    function login() {
-      if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: GOOGLE_CLIENT_ID,
-            scope: GOOGLE_CLIENT_SCOPES,
-            callback: 'handleClient',
-        });
-        console.log('tokenClient', tokenClient);
-        setGoogleClient(tokenClient);
-      } else {
-        console.error('google accounts library not loaded.');
-      }
-    }
+  onMount(async () => {
+    authStore.init();
+  });
 </script>
 <div>
     <nav class="left drawer l">
@@ -30,20 +20,23 @@
       <i>home</i>
       <div>Home</div>
     </a>
-    {#if $user}
     <a href="/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
+    {#if authStore.isAuthenticated && $user != null}
     <a href="/library">
-      <img class="circle tiny" src="{$user.picture}">
+      <img class="circle tiny" src="{$user.picture}" alt="{user.name}">
       <div>My Mosaics</div>
     </a>
+    <a on:click={authStore.logout}>
+      <i>logout</i>
+      <div>Logout</div>
+    </a>
     {:else}
-    <a on:click|preventDefault={login} href="/login">
+    <a on:click={authStore.open}>
       <i>account_circle</i>
       <div>
-        <SignIn />
         <div>Login</div>
       </div>
     </a>
