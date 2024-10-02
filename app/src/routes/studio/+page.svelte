@@ -1,11 +1,19 @@
 <script>
+  import { onMount } from "svelte";
   import { v4 as uuidv4 } from "uuid";
+  import { fetchGooglePhotosAlbums } from "$lib/stores/photos";
+
+  let albums = []
 
   let mosaic = {
     name: "my-mosaic-" + uuidv4(),
     background: "/images/background_600x400.png",
     tiles: [],
   }
+
+  onMount(async () => {
+    albums = await fetchGooglePhotosAlbums();
+  });
 </script>
 <style>
   .mosaic-background {
@@ -24,6 +32,12 @@
       <div>Click to change background image...</div>
     </div>
   </article>
+
+  <div class="grid">
+    {#each albums as album}
+    <div class="s12 m6 l3">{album}</div>
+    {/each}
+  </div>
   
   <article class="border medium no-padding">
       <div class="padding primary absolute center middle">

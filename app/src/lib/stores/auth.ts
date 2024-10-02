@@ -2,30 +2,34 @@ import { writable, get } from 'svelte/store';
 import { env } from '$env/dynamic/public';
 import { jwtVerify, jwtDecrypt, createRemoteJWKSet } from 'jose'
 
-const SCOPES = env.PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/drive.metadata.readonly'; // scopes required by API, separated by spaces
+const SCOPES = env.PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/photoslibrary.readonly'; // scopes required by API, separated by spaces
 const CLIENT_ID = env.PUBLIC_GOOGLE_CLIENT_ID; // client ID from console.developers.google.com
 const API_KEY = env.PUBLIC_GOOGLE_API_KEY; // API key from console.developers.google.com
 const APP_ID = env.PUBLIC_GOOGLE_APP_ID; // project number from console.developers.google.com
 const DISCOVERY_DOCS = [env.PUBLIC_GOOGLE_DISCOVERY_DOCS || 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-const GOOGLE_JWK_URL = env.GOOGLE_JWK_URL || 'https://www.googleapis.com/oauth2/v3/certs';
-const GOOGLE_JWK_ISSUER = env.GOOGLE_JWK_ISSUER || 'https://accounts.google.com';
-const LOCALSTORAGE_USER_KEY = env.LOCALSTORAGE_USER_KEY || 'user';
+const GOOGLE_JWK_URL = env.PUBLIC_GOOGLE_JWK_URL || 'https://www.googleapis.com/oauth2/v3/certs';
+const GOOGLE_JWK_ISSUER = env.PUBLIC_GOOGLE_JWK_ISSUER || 'https://accounts.google.com';
+const LOCALSTORAGE_USER_KEY = env.PUBLIC_LOCALSTORAGE_USER_KEY || 'user';
 
 // Example interface for user data (if using TypeScript)
 interface User {
   name: string;
   email: string;
+  picture: string;
   token: string;
 }
 
 // Define the initial state
 const userStore = writable<User | null>(null); // Stores the logged-in user data
+const tokenStore = writable<string>(""); // store for oauth access token
 const isAuthenticatedStore = writable<boolean>(false); // Boolean flag to track authentication status
 
 // Define the custom store object with methods
 const authStore = {
   // Expose the user store
   user: userStore,
+
+  token: tokenStore,
 
   // Expose the isAuthenticated store
   isAuthenticated: isAuthenticatedStore,
@@ -49,13 +53,15 @@ const authStore = {
         name: payload.name,
         email: payload.email,
         picture: payload.picture,
+        token: token,
       });
 
       isAuthenticatedStore.set(true);
     } catch (error) {
       console.error('JWT verification failed:', error);
-      userStore.set({});
       isAuthenticatedStore.set(false);
+      userStore.set(null);
+      tokenStore.set("");
     }
   },
 
@@ -80,17 +86,31 @@ const authStore = {
 
     // Verify the token
     await authStore.verifyAndDecodeJwt(token);
+
+    authStore.loadOAuth();
   },
 
   // Logout function to reset user and authentication status
   logout: () => {
-    userStore.set({});
     isAuthenticatedStore.set(false);
+    userStore.set(null);
+    tokenStore.set("");
     localStorage.removeItem(LOCALSTORAGE_USER_KEY); // remove from local storage
     console.log('User logged out');
   },
 
-  
+  // after we have signed in, load oauth client with proper scope
+  loadOAuth: () => {
+    google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      hint: "timstello@gmail.com",
+      callback: (token_resp) => {
+        console.log('TOKEN RESP: ', token_resp);
+        tokenStore.set(token_resp);
+      },
+    });
+  },
 
   // Initialize the store (for example, check local storage for stored credentials)
   init: () => {
@@ -99,6 +119,7 @@ const authStore = {
       authStore.login(JSON.parse(storedUser));
     } else {
       isAuthenticatedStore.set(false);
+      userStore.set(null);
     }
   }
 };
@@ -111,6 +132,5 @@ function loginCallback(resp) {
     console.error("unable to parse login response", resp);
   }
 }
-
 
 export default authStore;
