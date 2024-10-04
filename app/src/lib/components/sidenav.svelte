@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import authStore from '$lib/stores/auth';
+  import { base } from '$app/paths';
 
   let user = authStore.user;
 
@@ -12,20 +13,20 @@
     <nav class="left drawer l">
     <header>
       <nav>
-        <img src="/favicon.png" class="circle" alt="sveltekit">
+        <img src="{base}/favicon.png" class="circle" alt="sveltekit">
         <h6>photoMosaic</h6>
       </nav>
     </header>
-    <a href="/">
+    <a href="{base}">
       <i>home</i>
       <div>Home</div>
     </a>
-    <a href="/studio">
+    <a href="{base}/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
     {#if authStore.isAuthenticated && $user}
-    <a href="/library">
+    <a href="{base}/library">
       <img class="circle tiny" src="{$user.picture}" alt="{user.name}">
       <div>My Mosaics</div>
     </a>
@@ -40,17 +41,17 @@
         <div>Login</div>
       </div>
     </a>
-    <a href="/studio">
+    <a href="{base}/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
     {/if}
     <div class="divider"></div>
-    <a href="/gallery">
+    <a href="{base}/gallery">
       <i>public</i>
       <div>Public Gallery</div>
     </a>
-    <a href="/help">
+    <a href="{base}/help">
       <i>help</i>
       <div>Help</div>
     </a>  
