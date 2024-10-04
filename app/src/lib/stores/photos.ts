@@ -2,13 +2,11 @@ import { get } from "svelte/store";
 import authStore from "./auth";
 
 export async function fetchGooglePhotosAlbums() {
-    const user = get(authStore.user);
+    const token = get(authStore.token);
   
-    if (!user) {
+    if (!token) {
       throw new Error('User is not authenticated');
     }
-  
-    const token = user.token; // Assume the token is stored in the authStore
   
     try {
       const response = await fetch('https://photoslibrary.googleapis.com/v1/albums', {

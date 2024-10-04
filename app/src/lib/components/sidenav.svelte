@@ -24,7 +24,7 @@
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
-    {#if $user}
+    {#if authStore.isAuthenticated && $user}
     <a href="/library">
       <img class="circle tiny" src="{$user.picture}" alt="{user.name}">
       <div>My Mosaics</div>

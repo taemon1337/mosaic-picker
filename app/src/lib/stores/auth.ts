@@ -1,15 +1,16 @@
 import { writable, get } from 'svelte/store';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_GOOGLE_SCOPES, PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_API_KEY, PUBLIC_GOOGLE_APP_ID,  } from '$env/static/public';
 import { jwtVerify, jwtDecrypt, createRemoteJWKSet } from 'jose'
 
-const SCOPES = env.PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/photoslibrary.readonly'; // scopes required by API, separated by spaces
-const CLIENT_ID = env.PUBLIC_GOOGLE_CLIENT_ID; // client ID from console.developers.google.com
-const API_KEY = env.PUBLIC_GOOGLE_API_KEY; // API key from console.developers.google.com
-const APP_ID = env.PUBLIC_GOOGLE_APP_ID; // project number from console.developers.google.com
-const DISCOVERY_DOCS = [env.PUBLIC_GOOGLE_DISCOVERY_DOCS || 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-const GOOGLE_JWK_URL = env.PUBLIC_GOOGLE_JWK_URL || 'https://www.googleapis.com/oauth2/v3/certs';
-const GOOGLE_JWK_ISSUER = env.PUBLIC_GOOGLE_JWK_ISSUER || 'https://accounts.google.com';
-const LOCALSTORAGE_USER_KEY = env.PUBLIC_LOCALSTORAGE_USER_KEY || 'user';
+const SCOPES = PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/photoslibrary.readonly'; // scopes required by API, separated by spaces
+const CLIENT_ID = PUBLIC_GOOGLE_CLIENT_ID; // client ID from console.developers.google.com
+const API_KEY = PUBLIC_GOOGLE_API_KEY; // API key from console.developers.google.com
+const APP_ID = PUBLIC_GOOGLE_APP_ID; // project number from console.developers.google.com
+const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
+const GOOGLE_JWK_URL = 'https://www.googleapis.com/oauth2/v3/certs';
+const GOOGLE_JWK_ISSUER = 'https://accounts.google.com';
+const LOCALSTORAGE_USER_KEY = 'user';
+const LOCALSTORAGE_TOKEN_KEY = 'token';
 
 // Example interface for user data (if using TypeScript)
 interface User {
@@ -23,16 +24,19 @@ interface User {
 const userStore = writable<User | null>(null); // Stores the logged-in user data
 const tokenStore = writable<string>(""); // store for oauth access token
 const isAuthenticatedStore = writable<boolean>(false); // Boolean flag to track authentication status
+let oauthClient = null;
 
 // Define the custom store object with methods
 const authStore = {
   // Expose the user store
   user: userStore,
 
-  token: tokenStore,
+  token: tokenStore, // oauth token (not to be confused with userStore.token)
 
   // Expose the isAuthenticated store
   isAuthenticated: isAuthenticatedStore,
+
+  oauthClient: oauthClient,
 
   // Function to decode and verify JWT using jose
   async verifyAndDecodeJwt(token: string) {
@@ -87,7 +91,12 @@ const authStore = {
     // Verify the token
     await authStore.verifyAndDecodeJwt(token);
 
-    authStore.loadOAuth();
+    const storedToken = localStorage.getItem(LOCALSTORAGE_TOKEN_KEY);
+    if (storedToken) {
+      authStore.token.set(JSON.parse(storedToken));
+    } else {
+      authStore.loadOAuth();
+    }
   },
 
   // Logout function to reset user and authentication status
@@ -96,20 +105,29 @@ const authStore = {
     userStore.set(null);
     tokenStore.set("");
     localStorage.removeItem(LOCALSTORAGE_USER_KEY); // remove from local storage
+    localStorage.removeItem(LOCALSTORAGE_TOKEN_KEY); // remote stored token
     console.log('User logged out');
   },
 
   // after we have signed in, load oauth client with proper scope
   loadOAuth: () => {
-    google.accounts.oauth2.initTokenClient({
+    console.log('loading oauth client');
+    let client = google.accounts.oauth2.initCodeClient({
       client_id: CLIENT_ID,
       scope: SCOPES,
-      hint: "timstello@gmail.com",
+      ux_mode: 'popup',
+      login_hint: "timstello@gmail.com",
       callback: (token_resp) => {
         console.log('TOKEN RESP: ', token_resp);
         tokenStore.set(token_resp);
+        localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, JSON.stringify(token_resp));
+      },
+      error_callback: (err) => {
+        console.error("error loading oauth client", err);
       },
     });
+    oauthClient = client; // set client
+    oauthClient.requestCode();
   },
 
   // Initialize the store (for example, check local storage for stored credentials)
