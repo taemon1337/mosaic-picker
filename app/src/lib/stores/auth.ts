@@ -1,5 +1,5 @@
 import { writable, get } from 'svelte/store';
-import { PUBLIC_GOOGLE_SCOPES, PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_API_KEY, PUBLIC_GOOGLE_APP_ID,  } from '$env/static/public';
+import { PUBLIC_GOOGLE_SCOPES, PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_API_KEY, PUBLIC_GOOGLE_APP_ID  } from '$env/static/public';
 import { jwtVerify, jwtDecrypt, createRemoteJWKSet } from 'jose'
 
 const SCOPES = PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/photoslibrary.readonly'; // scopes required by API, separated by spaces
