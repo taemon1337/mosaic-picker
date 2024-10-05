@@ -1,6 +1,8 @@
 import { writable, get } from 'svelte/store';
 import { PUBLIC_GOOGLE_SCOPES, PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_API_KEY, PUBLIC_GOOGLE_APP_ID  } from '$env/static/public';
 import { jwtVerify, createRemoteJWKSet } from 'jose'
+import { base } from '$app/paths';
+import bcrypt from "bcryptjs";
 
 const SCOPES = PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/photoslibrary.readonly'; // scopes required by API, separated by spaces
 const CLIENT_ID = PUBLIC_GOOGLE_CLIENT_ID; // client ID from console.developers.google.com
@@ -24,6 +26,7 @@ interface User {
 const userStore = writable<User | null>(null); // Stores the logged-in user data
 const tokenStore = writable<string>(""); // store for oauth access token
 const isAuthenticatedStore = writable<boolean>(false); // Boolean flag to track authentication status
+const isAccessibleStore = writable<boolean>(false);
 let oauthClient = null;
 
 // Define the custom store object with methods
@@ -35,6 +38,8 @@ const authStore = {
 
   // Expose the isAuthenticated store
   isAuthenticated: isAuthenticatedStore,
+
+  isAccessible: isAccessibleStore,
 
   oauthClient: oauthClient,
 
@@ -130,14 +135,43 @@ const authStore = {
     oauthClient.requestCode();
   },
 
+  accessible: (url) => {
+    let access = get(isAccessibleStore);
+    if (access) {
+      return url !== base+'/passwall'
+    }
+    return false; // default deny
+  },
+
+  hashPassword: async (pass) => {
+    console.log("hashing password: ", pass);
+    try {
+      if (pass.length > 3) {
+        const saltRounds = 10;
+        let generatedHash = await bcrypt.hash(pass, saltRounds);
+        console.log('Generated Hash:', generatedHash);
+        return generatedHash;
+      } else {
+        console.log("password not long enough");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
   // Initialize the store (for example, check local storage for stored credentials)
   init: () => {
-    const storedUser = localStorage.getItem(LOCALSTORAGE_USER_KEY);
-    if (storedUser) {
-      authStore.login(JSON.parse(storedUser));
+    let access = get(isAccessibleStore);
+    if (access) {
+      const storedUser = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+      if (storedUser) {
+        authStore.login(JSON.parse(storedUser));
+      } else {
+        isAuthenticatedStore.set(false);
+        userStore.set(null);
+      }
     } else {
-      isAuthenticatedStore.set(false);
-      userStore.set(null);
+      console.log('not accessible');
     }
   }
 };

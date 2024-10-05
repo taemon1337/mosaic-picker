@@ -2,9 +2,10 @@
   import { onMount } from 'svelte';
   import authStore from '$lib/stores/auth';
   import { base } from '$app/paths';
-  import { isAuthenticated } from '$lib/stores/passwall';
 
   let user = authStore.user;
+  let accessible = authStore.isAccessible;
+  let authenticated = authStore.isAuthenticated;
 
   onMount(async () => {
     authStore.init();
@@ -18,16 +19,16 @@
         <h6>photoMosaic</h6>
       </nav>
     </header>
-    <a href="{base}">
+    <a href="{base}/">
       <i>home</i>
       <div>Home</div>
     </a>
-    {#if isAuthenticated}
+    {#if $accessible}
     <a href="{base}/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
-    {#if authStore.isAuthenticated && $user}
+    {#if $authenticated && $user}
     <a href="{base}/library">
       <img class="circle tiny" src="{$user.picture}" alt="{user.name}">
       <div>My Mosaics</div>
@@ -53,10 +54,10 @@
       <i>public</i>
       <div>Public Gallery</div>
     </a>
-    {/if}
     <a href="{base}/help">
       <i>help</i>
       <div>Help</div>
-    </a>  
+    </a>
+    {/if}  
   </nav>
 </div>

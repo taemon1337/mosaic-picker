@@ -1,6 +1,6 @@
 <script>
     import bcrypt from 'bcryptjs';
-    import { setAuthenticated, hashPassword } from '$lib/stores/passwall';
+    import authStore from '$lib/stores/auth';
     import { base } from '$app/paths';
     import { goto } from '$app/navigation';
     import { PUBLIC_ACCESS_CODE_HASH  } from '$env/static/public';
@@ -8,20 +8,18 @@
     let password = '';
     let error = '';
   
-    const storedHash = PUBLIC_ACCESS_CODE_HASH || "$2a$10$sXAcsqVoena0PEwiKkTCv.hSXeE7d6PtJfm7kADal4aLy08vaUMVG" // Pre-generated bcrypt hash
-    console.log('stored hash', storedHash);
+    const storedHash = PUBLIC_ACCESS_CODE_HASH || "$2a$10$Dn3zzux83huVXHzcqljtKO9Q8p9c1DdX7tMuhrUU1sG3qxI/HgdFq" // Pre-generated bcrypt hash
 
     async function submitPassword() {
       error = '';
       const match = await bcrypt.compare(password, storedHash);
-      console.log('checking if ' + password + " is a valid access code", match);
+      console.log('checking if "' + password + '" is a valid access code', match);
       if (match) {
-        setAuthenticated(true);
-        goto(base); // Redirect to the home page
+        authStore.isAccessible.set(true);
+        goto(base+"/"); // Redirect to the home page
       } else {
         error = 'Incorrect access code. Please contact admin.';
         password = ''; // clear out entered password
-        //console.warn(hashPassword(password)); // used to show generated hash
       }
     }
   </script>
