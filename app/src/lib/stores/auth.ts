@@ -122,10 +122,11 @@ const authStore = {
       scope: SCOPES,
       ux_mode: 'popup',
       login_hint: "timstello@gmail.com",
-      callback: (token_resp) => {
-        console.log('TOKEN RESP: ', token_resp);
-        tokenStore.set(token_resp);
-        localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, JSON.stringify(token_resp));
+      callback: (authResponse) => {
+        const authorizationCode = authResponse.code;
+
+      // Now exchange this authorization code for an access token
+      exchangeAuthorizationCodeForAccessToken(authorizationCode);
       },
       error_callback: (err) => {
         console.error("error loading oauth client", err);
@@ -133,6 +134,35 @@ const authStore = {
     });
     oauthClient = client; // set client
     oauthClient.requestCode();
+  },
+
+  exchangeAuthorizationCodeForAccessToken: async (authorizationCode) => {
+    const data = {
+      code: authorizationCode,
+      client_id: CLIENT_ID,
+      client_secret: API_KEY,
+      redirect_uri: REDIRECT_URI,
+      grant_type: 'authorization_code'
+    };
+  
+    const response = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams(data)
+    });
+  
+    const tokenResponse = await response.json();
+    console.log('Access Token Response:', tokenResponse);
+  
+    if (tokenResponse.access_token) {
+      // Store the access token and use it to call Google Photos API
+      tokenStore.set(tokenResponse);
+      localStorage.setItem(LOCALSTORAGE_TOKEN_KEY, JSON.stringify(tokenResponse));
+    } else {
+      console.error("Failed to get access token:", tokenResponse);
+    }
   },
 
   accessible: (url) => {
