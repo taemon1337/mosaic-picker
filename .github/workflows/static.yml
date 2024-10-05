@@ -33,6 +33,7 @@ jobs:
       PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.PUBLIC_GOOGLE_CLIENT_ID }}
       PUBLIC_GOOGLE_SCOPES: ${{ vars.PUBLIC_GOOGLE_SCOPES }}
       PUBLIC_GOOGLE_API_KEY: ${{ secrets.PUBLIC_GOOGLE_API_KEY }}
+      PUBLIC_ACCESS_CODE_HASH: ${{ secrets.PUBLIC_ACCESS_CODE_HASH }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
     defaults:
       run:
