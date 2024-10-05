@@ -44,10 +44,6 @@
         <div>Login</div>
       </div>
     </a>
-    <a href="{base}/studio">
-      <i>create</i>
-      <div>Mosaic Studio</div>
-    </a>
     {/if}
     <div class="divider"></div>
     <a href="{base}/gallery">
