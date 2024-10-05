@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import authStore from '$lib/stores/auth';
   import { base } from '$app/paths';
+  import { isAuthenticated } from '$lib/stores/passwall';
 
   let user = authStore.user;
 
@@ -21,6 +22,7 @@
       <i>home</i>
       <div>Home</div>
     </a>
+    {#if isAuthenticated}
     <a href="{base}/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
@@ -51,6 +53,7 @@
       <i>public</i>
       <div>Public Gallery</div>
     </a>
+    {/if}
     <a href="{base}/help">
       <i>help</i>
       <div>Help</div>

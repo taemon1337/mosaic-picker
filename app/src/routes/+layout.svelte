@@ -6,7 +6,7 @@
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
 
-    $: if (browser && !isAuthenticated() && $page.url.pathname !== base+'/passwall') {
+    $: if (browser && !isAuthenticated() && $page.url.pathname !== base+'/passwall' && $page.url.pathname !== base+'/help') {
       goto(base+'/passwall');
     }
 </script>
