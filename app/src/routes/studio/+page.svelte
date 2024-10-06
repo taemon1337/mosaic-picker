@@ -2,12 +2,13 @@
   import { onMount } from "svelte";
   import { v4 as uuidv4 } from "uuid";
   import { fetchGooglePhotosAlbums } from "$lib/stores/photos";
+  import { base } from "$app/paths";
 
   let albums = []
 
   let mosaic = {
     name: "my-mosaic-" + uuidv4(),
-    background: "/images/background_600x400.png",
+    background: base+"/images/background_600x400.png",
     tiles: [],
   }
 

@@ -98,6 +98,7 @@ const authStore = {
 
     const storedToken = localStorage.getItem(LOCALSTORAGE_TOKEN_KEY);
     if (storedToken) {
+      console.log('loading token from localstorage');
       authStore.token.set(JSON.parse(storedToken));
     } else {
       authStore.loadOAuth();
@@ -125,8 +126,8 @@ const authStore = {
       callback: (authResponse) => {
         const authorizationCode = authResponse.code;
 
-      // Now exchange this authorization code for an access token
-      exchangeAuthorizationCodeForAccessToken(authorizationCode);
+        // Now exchange this authorization code for an access token
+        authStore.exchangeAuthorizationCodeForAccessToken(authorizationCode);
       },
       error_callback: (err) => {
         console.error("error loading oauth client", err);
@@ -137,11 +138,14 @@ const authStore = {
   },
 
   exchangeAuthorizationCodeForAccessToken: async (authorizationCode) => {
+    let redirectUri = `${window.location.origin}/auth-callback`;
+  
+    console.log('exchanging auth code for access token');
     const data = {
       code: authorizationCode,
       client_id: CLIENT_ID,
       client_secret: API_KEY,
-      redirect_uri: REDIRECT_URI,
+      redirect_uri: redirectUri,
       grant_type: 'authorization_code'
     };
   
