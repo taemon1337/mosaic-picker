@@ -34,6 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth/sveltekit": "^1.7.4",
 		"bcryptjs": "^2.4.3",
 		"beercss": "^3.7.8",
 		"material-dynamic-colors": "^1.1.2"

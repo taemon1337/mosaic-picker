@@ -1,16 +1,11 @@
-<script>
-  import { onMount } from 'svelte';
-  import authStore from '$lib/stores/auth';
-  import { base } from '$app/paths';
+<script lang="ts">
+   import { signIn } from "@auth/sveltekit/client"
+   import { base } from "$app/paths";
 
-  let user = authStore.user;
-  let accessible = authStore.isAccessible;
-  let authenticated = authStore.isAuthenticated;
-
-  onMount(async () => {
-    authStore.init();
-  });
+   let user = {}
+   let authenticated = false;
 </script>
+ 
 <div>
     <nav class="left drawer l">
     <header>
@@ -23,21 +18,21 @@
       <i>home</i>
       <div>Home</div>
     </a>
-    {#if $authenticated && $accessible}
+    {#if authenticated}
     <a href="{base}/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
     <a href="{base}/library">
-      <img class="circle tiny" src="{$user.picture}" alt="{user.name}">
+      <img class="circle tiny" src="{user.picture}" alt="{user.name}">
       <div>My Mosaics</div>
     </a>
-    <a on:click={authStore.logout}>
+    <a>
       <i>logout</i>
       <div>Logout</div>
     </a>
     {:else}
-    <a on:click={authStore.open}>
+    <a on:click={signIn}>
       <i>account_circle</i>
       <div>
         <div>Login</div>
