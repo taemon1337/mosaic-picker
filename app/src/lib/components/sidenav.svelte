@@ -23,12 +23,11 @@
       <i>home</i>
       <div>Home</div>
     </a>
-    {#if $accessible}
+    {#if $authenticated && $accessible}
     <a href="{base}/studio">
       <i>create</i>
       <div>Mosaic Studio</div>
     </a>
-    {#if $authenticated && $user}
     <a href="{base}/library">
       <img class="circle tiny" src="{$user.picture}" alt="{user.name}">
       <div>My Mosaics</div>
@@ -54,6 +53,5 @@
       <i>help</i>
       <div>Help</div>
     </a>
-    {/if}  
   </nav>
 </div>

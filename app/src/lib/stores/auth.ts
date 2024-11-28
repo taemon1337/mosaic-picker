@@ -1,13 +1,12 @@
 import { writable, get } from 'svelte/store';
-import { PUBLIC_GOOGLE_SCOPES, PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_API_KEY, PUBLIC_GOOGLE_APP_ID  } from '$env/static/public';
+import { PUBLIC_GOOGLE_SCOPES, PUBLIC_GOOGLE_CLIENT_ID } from '$env/static/public';
 import { jwtVerify, createRemoteJWKSet } from 'jose'
 import { base } from '$app/paths';
 import bcrypt from "bcryptjs";
+import { dev } from '$app/environment';
 
 const SCOPES = PUBLIC_GOOGLE_SCOPES || 'https://www.googleapis.com/auth/photoslibrary.readonly'; // scopes required by API, separated by spaces
 const CLIENT_ID = PUBLIC_GOOGLE_CLIENT_ID; // client ID from console.developers.google.com
-const API_KEY = PUBLIC_GOOGLE_API_KEY; // API key from console.developers.google.com
-const APP_ID = PUBLIC_GOOGLE_APP_ID; // project number from console.developers.google.com
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const GOOGLE_JWK_URL = 'https://www.googleapis.com/oauth2/v3/certs';
 const GOOGLE_JWK_ISSUER = 'https://accounts.google.com';
@@ -26,7 +25,7 @@ interface User {
 const userStore = writable<User | null>(null); // Stores the logged-in user data
 const tokenStore = writable<string>(""); // store for oauth access token
 const isAuthenticatedStore = writable<boolean>(false); // Boolean flag to track authentication status
-const isAccessibleStore = writable<boolean>(false);
+const isAccessibleStore = writable<boolean>(dev);
 let oauthClient = null;
 
 // Define the custom store object with methods
@@ -117,12 +116,14 @@ const authStore = {
 
   // after we have signed in, load oauth client with proper scope
   loadOAuth: () => {
+    let redirectUri = `${window.location.origin}/auth-callback`;
     console.log('loading oauth client');
     let client = google.accounts.oauth2.initCodeClient({
       client_id: CLIENT_ID,
       scope: SCOPES,
       ux_mode: 'popup',
       login_hint: "timstello@gmail.com",
+      redirect_uri: redirectUri,
       callback: (authResponse) => {
         const authorizationCode = authResponse.code;
 
@@ -139,12 +140,13 @@ const authStore = {
 
   exchangeAuthorizationCodeForAccessToken: async (authorizationCode) => {
     let redirectUri = `${window.location.origin}/auth-callback`;
-  
+    console.log('Redirect URI:', redirectUri);
+    console.log('AuthCode: ', authorizationCode);
+
     console.log('exchanging auth code for access token');
     const data = {
       code: authorizationCode,
       client_id: CLIENT_ID,
-      client_secret: API_KEY,
       redirect_uri: redirectUri,
       grant_type: 'authorization_code'
     };

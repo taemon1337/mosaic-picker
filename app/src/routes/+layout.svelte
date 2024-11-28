@@ -4,9 +4,9 @@
     import authStore from '$lib/stores/auth';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
-    import { browser } from '$app/environment';
+    import { browser, dev } from '$app/environment';
 
-    $: if (browser && !authStore.accessible($page.url.pathname)) {
+    $: if (browser && !dev && !authStore.accessible($page.url.pathname)) {
       goto(base+'/passwall');
     }
 </script>
