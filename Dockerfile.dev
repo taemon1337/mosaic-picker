@@ -1,0 +1,37 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+# Install development tools and debugging utilities
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Enable corepack for yarn
+RUN corepack enable
+
+# Copy package files
+COPY package.json yarn.lock* ./
+
+# Install dependencies
+RUN yarn install
+
+# Create directory for node_modules
+RUN mkdir -p /app/node_modules
+
+# Set NODE_ENV to development
+ENV NODE_ENV=development
+ENV ORIGIN=http://localhost:5173
+
+# Expose ports for app and debugging
+EXPOSE 5173
+EXPOSE 9229
+
+# The actual source code will be mounted as a volume
+# This is just a placeholder to ensure the directory exists
+COPY . .
+
+# Start the development server
+CMD ["yarn", "dev", "--host", "0.0.0.0", "--port", "5173"]
