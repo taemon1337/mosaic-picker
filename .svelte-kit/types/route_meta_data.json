@@ -9,6 +9,10 @@
 		"src/routes/+layout.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/help": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.server.ts"
+	],
 	"/library": [
 		"src/routes/+layout.ts",
 		"src/routes/+layout.server.ts"

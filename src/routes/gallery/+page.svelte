@@ -24,7 +24,7 @@
 </script>
 
 <div class="container">
-    <h1>My Mosaics</h1>
+    <h1>Public Mosaics</h1>
 
     <div class="grid">
         {#each mosaics as mosaic}

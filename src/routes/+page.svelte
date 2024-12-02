@@ -38,26 +38,3 @@
         <p>Mosaic can be downloaded in poster scale sizes for high quality photo prints.</p>
     </div>
 </div>
-
-<style>
-    .responsive {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        padding: 2rem;
-    }
-    
-    .medium-width {
-        max-width: 300px;
-    }
-    
-    .medium-height {
-        max-height: 300px;
-    }
-    
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-</style>

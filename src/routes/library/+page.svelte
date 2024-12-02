@@ -10,7 +10,7 @@
         albums = await fetchGooglePhotosAlbums();
     });
 
-    async function loadPhotos(albumId: string) {
+    async function loadPhotos(albumId) {
         // TODO: Implement photo loading from Google Photos API
         selectedAlbum = albums.find(a => a.id === albumId);
         photos = Array(12).fill(null).map((_, i) => ({
