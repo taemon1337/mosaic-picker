@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static'
+import adapter from '@sveltejs/adapter-auto'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const base = process.env.NODE_ENV === 'development' ? '' : '/mosaic-picker'; // github pages base path

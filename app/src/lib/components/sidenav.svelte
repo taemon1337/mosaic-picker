@@ -32,7 +32,7 @@
       <div>Logout</div>
     </a>
     {:else}
-    <a on:click={signIn}>
+    <a on:click|preventDefault|stopPropagation={signIn}>
       <i>account_circle</i>
       <div>
         <div>Login</div>
