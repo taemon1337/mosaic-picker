@@ -1,13 +1,23 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { fetchGooglePhotosAlbums } from "$lib/stores/photos";
+    import { page } from "$app/stores";
 
     let albums = [];
     let selectedAlbum = null;
     let photos = [];
 
     onMount(async () => {
-        albums = await fetchGooglePhotosAlbums();
+        const session = $page.data.session;
+        if (session?.accessToken) {
+            try {
+                albums = await fetchGooglePhotosAlbums(session.accessToken);
+            } catch (error) {
+                console.error('Failed to fetch albums:', error);
+            }
+        } else {
+            console.error('No access token available');
+        }
     });
 
     async function loadPhotos(albumId) {
@@ -76,34 +86,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .container {
-        padding: 2rem;
-    }
-
-    .grid {
-        margin-top: 2rem;
-    }
-
-    img.responsive {
-        aspect-ratio: 1;
-        object-fit: cover;
-    }
-
-    button.active {
-        background: var(--primary);
-        color: white;
-    }
-
-    .badge {
-        background: var(--surface-variant);
-        padding: 0.25rem 0.5rem;
-        border-radius: 1rem;
-        font-size: 0.8rem;
-    }
-
-    button.active .badge {
-        background: var(--primary-container);
-    }
-</style>
